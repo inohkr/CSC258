@@ -1,0 +1,690 @@
+\documentclass[12pt]{article}
+
+% \usepackage{spikey}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{soul}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{chngcntr}
+\usepackage{centernot}
+\usepackage[shortlabels]{enumitem}
+\usepackage[margin=1truein]{geometry}
+\usepackage{tikz}
+\usepackage{dsfont}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{tabularx}
+
+\linespread{1.15}
+
+\counterwithin{equation}{section}
+\counterwithin{figure}{section}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{example}{Example}[section]
+
+\newcommand{\ttilde}[1]{\tilde{\tilde{#1}}}
+\newcommand\aug{\fboxsep=-\fboxrule\!\!\!\fbox{\strut}\!\!\!}
+\newcommand{\bfx}{\textbf{x}}
+\newcommand{\bfb}{\textbf{b}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\axo}{$A\textbf{x}=\textbf{0}$}
+
+\pagestyle{fancy}
+\lhead{Computer Organization}
+\usepackage[
+    type={CC},
+    modifier={by-nc},
+    version={4.0},
+]{doclicense}
+
+\title{CSC258: Computer Organization}
+\date{\today}
+\author{InSeok Oh}
+\begin{document}
+\theoremstyle{definition}
+\maketitle
+\doclicenseThis
+\tableofcontents
+\newpage
+
+\section{Gates}
+% \subsection{Types of Gates}
+    \includegraphics[width=\textwidth]{sources/gates.jpeg}
+Gates are the most primitive lgoic elemtns used in digital systems, and we use the Boolean algebra to deal with binary varaibles and logic operations.
+A single-output Boolean function is a mpaping from each of the possible combiantions of values 0 and 1 on the function variables to value 0 or 1.
+Consider an example Boolean equation representing function F:
+$$F(X, Y, Z) = X + Y'Z
+\begin{proposition}
+    \ \\
+    Laws of Boolean equations:
+\begin{enumerate}
+    \item AA' = 0
+    \item A + A' = 1
+    \item A + 1 = 1
+    \item A + A = A
+    \item 1A = A
+    \item AA = A
+    \item A + AB = A
+    \item A(A+B) = A
+    \item A+(AB) = A
+    \item A + A'B = A + B
+    \item (AB)' = A' + B'
+    \item (A + B)' = A'B'
+    \item (A + B)(A + C) = A + BC
+    \item Associative law
+    \item Commutative law
+\end{enumerate}
+\end{proposition}
+\newpage
+\begin{example}
+    \ \\
+    \includegraphics[width=\textwidth]{sources/gates-example.png}
+    In Boolean equations,
+    \begin{enumerate}
+        \item \begin{align*}
+            &\ \ \ \ (((AB)'(BC)')'((AB)'(BC)')')'\\
+            &= (((AB)'(BC)')')'\\
+            &= (AB)'(BC)'\\
+            &= (A'+B')(B'+C')\\
+            &= B' + A'C'\\
+            &= B' + (A+C)'\\
+            &= (B(A+C))'
+        \end{align*}
+        \item \begin{align*}
+            &\ \ \ \ A'+B'C'\\
+            &= A' + (B + C)'\\
+            &= (A(B+C))'
+        \end{align*}
+        \item \begin{align*}
+            &B'C+A'
+        \end{align*}
+        \item \begin{align*}
+            &C'B+B'A
+        \end{align*}
+        \item \begin{align*}
+            &\ \ \ \ A'C'+B'\\
+            &= (A+C)'+B'\\
+            &= ((A+C)B)'
+        \end{align*}
+        \item \begin{align*}
+            &\ \ \ \ A(AB+C)\\
+            &= AB+AC\\
+            &= A(B+C)
+        \end{align*}
+        \item \begin{align*}
+            &\ \ \ \ ABC' + C'B + B'A\\
+            &= C'(AB + B) + B'A\\
+            &= C'B + B'A
+        \end{align*}
+        \item \begin{align*}
+            &\ \ \ \ (AB+AC)'\\
+            &= (A(B+C))'
+        \end{align*}
+        \item \begin{align*}
+            &A(B+C)
+        \end{align*}
+        \item \begin{align*}
+            &\ \ \ \ (A((AB)'C)')'\\
+            &= (A(AB+C'))'\\
+            &= (A(B+C'))'\\
+            &= A' + B'C
+        \end{align*}
+    \end{enumerate}
+    Thus we have 1 = 5, 2 = 8, 3 = 10, 4 = 7, and 6 = 9.  
+\end{example}
+\section{Transistors}
+\begin{itemize}
+    \item Invented by William Shockely, John Bardeen and Walter Brattain in 1947, replacing previous vacuum-tube technology.
+    \item A transistor is a device that works like an electric swith. To be able to turn devices on and off the electricity.
+    \item Used for applications such as amplification, switching and digital logic desin.
+\end{itemize}
+Transistors connect Point A to Point B, based on the value at Point C.\\
+\\
+If the value at Point C is high, A \& B are connected.
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/1.png}
+\end{align*}
+If the value at Point C is low, A \& B are not.
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/0.png}
+\end{align*}
+where C is called gates.
+\subsection{Electricity}
+\begin{itemize}
+    \item Electricity is the flow of charged particles through a material.
+    \item These charged particles come from atoms, which are made up of protons, neutrons, and electros
+    \item Outermost shell is called a valence shell.
+    \item Atoms that can pass electros are called conductors
+    \item Atoms that can't are called insulators
+\end{itemize}
+\begin{example}
+    Carbon atom is insulator since it doesn't release or accept electors.
+\end{example}
+If there are more electrons than the maximum capacity at valence shell, then that atom wants to release electrons.
+\begin{itemize}
+    \item Electrical particles want to flow from regions of \textbf{high electrical potential} (many electrons) to regions of \textbf{low electrical potential}.
+    \item This potential is referred to as \textbf{voltage}.
+    \item The rate of electron flow is called the \textbf{current}.
+\end{itemize}
+\textbf{Voltage} is like the elevation of the water above the ground.\\
+\textbf{Current} is the rate at which the water flows.\\
+The relationship between voltage $V$ and current $I$ is called \textbf{resistance}:
+$$R=V/I$$
+\subsection{Resistance}
+In terms of the water analogy, \textbf{resistance} would be the measure of how restrictive the pipe is that connects the reservoir to the ground.
+\begin{itemize}
+    \item Wide, smooth pipe = low resistance
+    \item Narrow, twisty pipe = high resistance
+\end{itemize}
+Electrical resistance indicates how well a material allows electricity to flow through it:
+\begin{itemize}
+    \item High resistance aka, insulators don't conduct electricity at all, or only under special circumstances.
+    \item Low resistance aka, conductors conduct electricity welll.
+    \item These are largely determined by the position on the element on the periodic table.
+    \item Measured in ohms $\Omega$.
+    \item Semiconductors are somewhere in between conductors and insulators.
+\end{itemize}
+Even though current is caused by electrons flowing through a material, the convention is to measure current as the \textbf{movement of positive charges}.\\
+\begin{itemize}
+    \item Protons don't actually move. When electrons move from point A to point B, the result is that B become more negative and A becomes more positive.
+    \item Scientists historically viewed current in terms of this creation of positive charge in a material.
+\end{itemize}
+\subsection{The paht of electricity}
+\begin{itemize}
+    \item Current always flows toward the zero voltage point of a circuit, commonly refereed to as \textbf{ground}.
+    \item Electricity always like to take the path of least resistance, from source to ground.
+\end{itemize}
+\subsection{Semiconductors}
+Semiconductor materials (silicon, germanium) behave like one or the other depending on factors like temperature and \textbf{impurities} (adding non semiconductors to pure semi conductors) in the material.
+\begin{align*}
+    \includegraphics[scale = 0.5]{sources/semi1.png}
+\end{align*}
+\begin{itemize}
+    \item Semiconductors are solid and stable at room temperature, but energy can make electrons from the valence layer become loose.
+    \item At room temperature, a weak current will flow through the material, much less than that of a conductor.
+\end{itemize}
+\subsubsection{Impurities}
+To encourage the semiconductor's conductivity, \textbf{impurities} are introduced the fabrication precoess, to increase the number of free charge \textbf{carriers}.
+\begin{itemize}
+    \item \textbf{n-type}: adding elements from group 15, which have 5 electrons in its valence layer (e.g., phosphorus).
+    \item \textbf{p-type}: adding elements from group 13, which have 3 electrons in its valence layer (e.g., boron).
+\end{itemize}
+\begin{align*}
+    \includegraphics[scale = 0.5]{sources/imp1.png}
+    \includegraphics[scale = 0.5]{sources/imp2.png}
+\end{align*}
+This process is also referred to as \textbf{doping} the semiconductor.
+\begin{itemize}
+    \item In the case of n-type semiconductors, the carriers are \textbf{electrons} that are not bound to the solid, and can flow more freely through the material.
+    \item For p-type semiconductors, the carriers are called \textbf{holes}, to represent the elctron gap as a particle as well.
+\end{itemize}
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/imp3.png}
+\end{align*}
+Note that conventional current flow is opposite of electron flow.
+\subsection{p-n Junctions}
+\begin{align*}
+    \includegraphics[scale=0.7]{sources/pn1.png}
+\end{align*}
+Electrons in n-type will move to the holes in p-type making phosphorus positively charged and boron being negatively charged.
+In the result, we have
+\begin{align*}
+    \includegraphics[scale=1]{sources/pn2.png}
+\end{align*}
+The particle-free section in the middle called the \textbf{depletion layer} in which electrons cannot jump over to p-type region.\\
+Once this depletion layer is wide enough, the dopin atoms that remain will create an electric feild in that region since there is an attraction between negatively and positively charged ions.
+\subsubsection{Electric fields}
+What is an electric field?
+\begin{itemize}
+    \item An electric field is created when a charge difference exists between two regions.
+    \item Any electrons in the middle would be attracted to the positive side and repelled by the negative side.
+\end{itemize}
+\begin{example}
+    depletion layer
+    \begin{itemize}
+        \item When a phosphours atom loses its electron, that atom develops an overall positive charge.
+        \item Similarly, when a boron atom takes on an extra electron, that atom develops an overall negative charge.
+        \item This creates an electric field in the depletion layer.
+    \end{itemize}
+\end{example}
+A depletion layer is made up of many of these electrically imbalanced phosphorus and boron atoms.
+There are two types of current:
+\begin{itemize}
+    \item The electric field caused by these atoms will cause holds to flow back to the p section, and electrons to flow back to the n section. This is called \textbf{drift current} (Moving because of the electric field).
+    \item The current caused by the initial electron/hole recombination is called \textbf{diffusion} (Electrons moving from high concentration to low concentration).
+\end{itemize}
+At rest, these two currents reach \textbf{equilibrium}.
+\subsubsection{Forward Bias}
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/fb.png}
+\end{align*}
+The electrons are constantly injected into n region pushing the electrons.
+\begin{itemize}
+    \item When a positive voltage is applied to the p end of the Junction, electrons are injected into the n-type section.
+    \item This narrows the depletion layer and increasing the electron diffusion rate.
+    \item With a smaller depletion layer, the electrons travel more easily through to the p-type section, and back into the other terminal of the voltage source.
+\end{itemize}
+\subsubsection{Reverse Bias}
+\begin{align*}
+    \includegraphics[scale=0.3]{sources/rb.png}
+\end{align*}
+\begin{itemize}
+    \item When a positive voltage is applied to the n region, the depletion region at the junciton becomes wider, preventing the carriers from passing.
+    \item a small current still flows through the circuit, but it is weak and does not increase with an increase in the applied voltage.
+\end{itemize}
+Thus wehn a junction is forward biased, it becomes like a virtual \textbf{short-circuit}, and when the junction is reverse biased, it becomes like a virtual \textbf{open-circuit}.
+\subsection{Transistors}
+Three main types:
+\begin{itemize}
+    \item Bipolar Junction Transistors (BJTs)
+    \item Metal Oxide Semiconductor Field Effect Transistor (MOSFET)
+    \item Junction Field Effect Transistor (JFET)
+\end{itemize}
+The last two are part of the same family.
+\subsubsection{The MO of MOSFETs}
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/mo.png}
+\end{align*}
+MOSFETs are composed of a layer of semiconductor material, with two layers on top of the semiconductor:
+\begin{itemize}
+    \item An oxide layer that doesn't conduct electricity
+    \item A metal layer (called the gate), that can have an electric charge applied to it.
+    \item These are the M and O components of MOSFETs.
+\end{itemize}
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/smo.png}
+\end{align*}
+\begin{itemize}
+    \item The semiconductor sections are two pockets of n-type material, resting on a \textbf{substrate} layer of p-type material.
+    \item A voltage is applied across the two n-type sections, called the \textbf{drain} and the \textbf{source}. No current will pass between them though, because the p section in between creates at least one reverse-biased pn junction.
+\end{itemize}
+If we apply voltage to NPN
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/3.png}
+\end{align*}
+\subsubsection{n-channel MOSFETs}
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/5.png}
+\end{align*}
+\begin{itemize}
+    \item When a voltage is applied to the gate, positive charges are built up in the metal layer, which attracts a layer of negative charge (minor carriers in the p region) to the surface of the p-type material.
+    \item This layer of electrons creates an n-type channel between the drain and the source, connecting the two and allowing current to flow between them.
+\end{itemize}
+\subsubsection{nMOS vs pMOS}
+Two types of MOSFETs exist, based on the semiconductor type in the drain and source, and the channel formed.
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/6.png}
+    \includegraphics[scale=0.5]{sources/7.png}
+\end{align*}
+\begin{itemize}
+    \item nMOS transistors (the design described so far) conduct electricity when a \textbf{positive} voltage (5V) is applied to the gate.
+    \item pMOS transistors conduct electricity (i.e., act as a closed switch) when the gate voltage is logic-zero
+\end{itemize}
+\subsection{Transistors to Gates}
+\begin{itemize}
+    \item MOSFETs can make current flow, based on the voltage values in the gate and drain.
+    \item Combining MOSFETs to create high and low voltage outputs, based on high and low voltage inputs.
+    \item General approach: create transistor circuits that make current flow to outputs from high or low voltage, based on transistor input values.
+\end{itemize}
+\begin{align*}
+    \includegraphics[scale=0.3]{sources/8.png}
+\end{align*}
+\subsubsection{Making gates}
+The blow is the example of the NOT gate.
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/9.png}
+\end{align*}
+The transistor connected to $V_{cc}$ is pMOS transistor and the bleow it is nMOS transistor.
+\begin{itemize}
+    \item When A is 0, pMOS transistor is ON, then the voltage travels to the output Y.
+    \item When A is 1, nMOS transistor is ON, then the voltage will go to the ground and the output Y is 0.
+\end{itemize}
+\begin{example}
+    \begin{align*}
+        &\includegraphics[scale=0.5]{sources/10.png}
+        \includegraphics[scale=0.5]{sources/11.png}\\
+        &Y=A'+B
+    \end{align*}
+\end{example}
+\begin{example}
+    \begin{align*}
+        &\includegraphics[scale=0.5]{sources/12.png}
+        \includegraphics[scale=0.5]{sources/13.png}\\
+        &Y=A'B+AC \tag{multiplexer}
+    \end{align*}
+    When A = 1, B = 1, C = 0, the path is shown as below.\\
+    \begin{align*}
+        \includegraphics[scale=0.5]{sources/14.png}
+    \end{align*}
+\end{example}
+\textit{Remark:} Current is measured in the opposite direction of electron flow (i.e. as the flow of positive charge through the material).
+\section{Circuit Creation}
+\subsection{Creating complex circuits}
+\begin{itemize}
+    \item If you're lucky, a truth table is provided to express the circuit.
+    \item Usually the behaviour of the circuit is expressed in words, and the first step involves creating a truth table that represents the described behaviour.
+\end{itemize}
+\begin{example} Block/IO diagram\\
+    The circuit has three inputs and two outputs.
+    \begin{align*}
+        \includegraphics[scale=0.5]{sources/15.png}
+    \end{align*}
+    \begin{enumerate}
+        \item What logic is needed to set $X$ high when all three inputs are high?\\Sample example, $X=ABC$.
+        \item What logic is needed to set $Y$ when the number of high inputs is odd?\\Sample example, $Y=A\oplus B\oplus C$.
+    \end{enumerate}
+\end{example}
+\subsubsection{Combinational circuits}
+Small problems can be solved easily.
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/16.png}\\
+    Output only depends on inputs
+\end{align*}
+Larger problems require a more systematic approach.\\
+How do we approach problems like these complex logic?
+\begin{enumerate}
+    \item Create truth tables.
+    \item Express as Boolean expression.
+    \item Convert to gates.
+\end{enumerate}
+\subsection{Truth table}
+\begin{example}\ \\
+    Given three inputs $A, B,$ and $C$, make output $Y$ high wherever any
+    of the inputs are low, except when all three are low or when $A$ and $C$ are high.
+    \begin{align*}
+    \begin{tabularx}{0.8\textwidth} { 
+        | >{\centering\arraybackslash}X 
+        | >{\centering\arraybackslash}X 
+        | >{\centering\arraybackslash}X  |
+        | >{\centering\arraybackslash}X  | }
+       \hline
+       A & B & C & Y\\
+       \hline
+       0  & 0 & 0 & 0\\
+      \hline
+      0  & 0 & 1 & 1\\
+      \hline
+      0  & 1 & 0 & 1\\
+      \hline
+      0  & 1 & 1 & 1\\
+      \hline
+      1  & 0 & 0 & 1\\
+      \hline
+      1  & 0 & 1 & 0\\
+      \hline
+      1 & 1 & 0 & 1\\
+      \hline
+      1  & 1 & 1 & 0\\
+      \hline
+    \end{tabularx}    
+    \end{align*}
+\end{example}
+\subsubsection{Minterms and Maxterms}
+If we think of the values of $A$, $B$ and $C$ together represent binary numbers, then it is in ascending order and Row column is its decimal representation. Minterm is used to describe AND and OR circuits.
+\begin{align*}
+    \begin{tabularx}{0.8\textwidth} { 
+        | >{\centering\arraybackslash}X 
+        | >{\centering\arraybackslash}X 
+        | >{\centering\arraybackslash}X  
+        | >{\centering\arraybackslash}X 
+        | >{\centering\arraybackslash}X 
+        | >{\centering\arraybackslash}X 
+        | >{\centering\arraybackslash}X  | }
+       \hline
+       Maxterm & Minterm & Row & A & B & C & Y\\
+       \hline
+       $M_0$&$m_0$&0&0  & 0 & 0 & 0\\
+       \hline
+       $M_1$&$m_1$&1&0  & 0 & 1 & 1\\
+       \hline
+       $M_2$&$m_2$&2&0  & 1 & 0 & 1\\
+       \hline
+       $M_3$&$m_3$&3&0  & 1 & 1 & 1\\
+       \hline
+       $M_4$&$m_4$&4&1  & 0 & 0 & 1\\
+       \hline
+       $M_5$&$m_5$&5&1  & 0 & 1 & 0\\
+       \hline
+       $M_6$&$m_6$&6&1 & 1 & 0 & 1\\
+       \hline
+       $M_7$&$m_7$&7&1  & 1 & 1 & 0\\
+      \hline
+    \end{tabularx}    
+\end{align*}
+\textbf{Sum of Products/Minterm (SOP)}
+\begin{itemize}
+    \item $A\implies1$
+    \item $\bar{A}\implies0$
+\end{itemize}
+\textbf{Product of Sums/Maxterm (POS)}
+\begin{itemize}
+    \item $A\implies0$
+    \item $\bar{A}\implies1$
+\end{itemize}
+For $Y$ being 1, express $Y$ as the OR combination of minterms, then we have
+\begin{align*}
+    Y(A,B,C)&=m_1+m_2+m_3+m_4+m_6\\
+    &=\bar{A}\bar{B}C+\bar{A}B\bar{C}+\bar{A}BC+A\bar{B}\bar{C}+AB\bar{C}
+\end{align*}
+For $Y$ being 0, express $Y$ as the AND combination of maxterms, then we have
+\begin{align*}
+    Y(A,B,C)&=M_0\cdot M_5\cdot M_7\\
+    &=(A+B+C)\cdot(\bar{A}+B+\bar{C})\cdot(\bar{A}+\bar{B}+\bar{C})
+\end{align*}
+\begin{example}
+    Minterms and Maxterms for XOR gate:
+    \begin{align*}
+        Y&=m_1+m_2\\
+        &=\bar{A}B+A\bar{B}\\
+        or\\
+        Y&=M_0M_3\\
+        &=(A+B)(\bar{A}+\bar{B})
+    \end{align*}
+\end{example}
+A more formal description:
+\begin{itemize}
+    \item Minterm is an AND expression with every input present in true or complemented form.
+    \item Maxterm is an OR expression with every input present in true or complemented form.
+\end{itemize}
+\subsubsection{The intuition behind minterms}
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/17.png}
+    \includegraphics[scale=0.5]{sources/18.png}
+\end{align*}
+\begin{itemize}
+    \item If $m_{15}=ABCD$, then $ABCD$ is low at all times, except when all four of the input values are high.
+    \item If $M_0=A+B+C+D$, thenn $A+B+C+D$ is always high, except in the one case where all four input values are low.
+\end{itemize}
+\subsection{Specifying circuit behaviour}
+Circuits are often described using minterms or maxterms, as a form of logic shorthand.
+\begin{itemize}
+    \item Given $n$ inputs, there are $2^n$ minterms and maxterms possible (same as rows in a truth table).
+    \item For example, given 3 inputs, minterms are $m_0$ $(\bar{A}\bar{B}\bar{C})$ to $m_7$ $(ABC)$ and maxterms are $M_0$ $(A+B+C)$ to $M_7$ $(\bar{A}+\bar{B}+\bar{C})$
+\end{itemize}
+\begin{example}
+    \ \\
+    Given 4 inputs $A, B, C$ and $D$,\\
+    \begin{itemize}
+        \item $m_9\implies m_{1001}\implies A\bar{B}\bar{C}D$
+        \item $m_{15}\implies m_{1111}\implies ABCD$
+        \item $m_{16}$ is not possible with only four inputs.
+        \item $M_2\implies M_{0010}\implies A+B+\bar{C}+D$
+    \end{itemize}
+    Which minterm is this?\\$\bar{A}B\bar{C}\bar{D}\implies m_4$
+\end{example}
+What are minterms used for?
+\begin{itemize}
+    \item A single minterm indicates a set of inputs that will make the output go high.
+    \item For example, $m_2$, output only goes high in third line of truth table.
+\end{itemize}
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/19.png}
+\end{align*}
+What happens when you combine two minterms?
+\begin{itemize}
+    \item Using an OR operation, the result is an output that goes high in both minterm cases.
+\end{itemize}
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/20.png}
+\end{align*}
+\subsection{Creating Boolean expressions}
+Two canonical form of Boolean expressions:
+\begin{itemize}
+    \item Sum of Minterms (SOM):\\Since each minterm corresponds to a single high
+    output in the truth table, the combined high outputs
+    are a union of these minterm expressions. Expressed in “Sum-of-Products” form.
+    \item Product of Maxterms (POM):\\Since each maxterm only produces a single low
+    output in the truth table, the combined low outputs
+    are an intersection of these maxterm expressions. Expressed in “Product-of-Sums” form.
+\end{itemize}
+\newpage
+\begin{example}
+    \ \\
+    \begin{align*}
+        &Y=m_2+m_6+m_7+m_{10}\\
+        &\includegraphics[scale=0.5]{sources/21.png}
+    \end{align*}
+\end{example}
+\newpage
+\begin{example}
+    \ \\
+    \begin{align*}
+        &Y=M_3M_5M_7M_{10}M_{14}\\
+        &\includegraphics[scale=0.5]{sources/22.png}
+    \end{align*}
+\end{example}
+\begin{itemize}
+    \item Sum of Minterms is a way of expressing which inputs cause the output to go high.
+    \item Minterm and maxterm expressions are used for efficiency reasons:\\More compact than displaying entire truth tables.
+    \item Sum-of-minterms are useful in cases with very few input combinations that produce high output.
+    \item Product-of-maxterms are useful when expressing truth tables that have very few low output case.
+\end{itemize}
+\subsection{Converting SOM to gates}
+Once you have a Sum of Minterms expression, it is easy to conver this to the equivalent combination of gates:
+\begin{align*}
+    m_0+m_1+m_2+m_3=\bar{A}\bar{B}\bar{C}+\bar{A}\bar{B}C+\bar{A}B\bar{C}+\bar{A}BC\\
+    \includegraphics[scale=0.5]{sources/23.png}
+\end{align*}
+\subsection{Reducing circuits}
+\begin{align*}
+    &\includegraphics[scale=0.4]{sources/24.png}\\
+    &\includegraphics[scale=0.4]{sources/25.png}\\
+    &\includegraphics[scale=0.3]{sources/26.png}
+\end{align*}
+\subsubsection{Converting to NAND gates}
+De Morgan's Law is important because out of all the gates, NANDs are the cheapest to fabricate.
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/28.png}
+\end{align*}
+\begin{itemize}
+    \item Sum of Products circuit could be converted into an equivalent circuit of NAND gates:\begin{align*}
+        \includegraphics[scale=0.5]{sources/27.png}\end{align*}
+\end{itemize}
+\subsubsection{Reducing Boolean expressions}
+If we given the expressions
+\begin{align*}
+    Y&=\bar{A}BC+A\bar{B}\bar{C}+AB\bar{C}+ABC\\
+    &=BC+A\bar{C} \tag{by combining end and middle terms.}
+\end{align*}
+What is considered the simplest expression?
+\begin{itemize}
+    \item Simple denotes the lowest \textbf{gate cost (G)} or the lowest \textbf{gate cost with NOTs (GN)}.
+    \item Gate cost (G) does not count inverters.
+\end{itemize}
+\begin{example}
+    \begin{align*}
+        \includegraphics[scale=0.5]{sources/29.png}
+    \end{align*}
+\end{example}
+\subsection{Karnaugh maps}
+Karnaugh maps provide a graphical method for enahncing understanding of optimization and solving small optimization problems of for "two_level" logic circuits.
+\begin{itemize}
+    \item Karnaugh maps are a 2D grid of minterms, where adjacent minterm locations in the grid differ by a single literal.
+    \item Values of the grid are the output for that minterm. \begin{align*}
+        \includegraphics[scale=0.5]{sources/30.png}
+    \end{align*}
+\end{itemize}
+\begin{example}
+    Four input K-map
+    \begin{align*}
+        \includegraphics[scale=0.5]{sources/31.png}
+    \end{align*}
+\end{example}
+Once Karnaugh maps are created, draw boxes over groups of high output values.
+\begin{itemize}
+    \item Boxes must be rectangular, and aligned with map.
+    \item Number of values contained within each box must be a power of 2.
+    \item Boxes may overlap with each other.
+    \item Boxes may wrap across edges of map.\begin{align*}
+        \includegraphics[scale=0.5]{sources/32.png}
+    \end{align*}
+    \item Make grouping as big as possible.
+\end{itemize}
+Once you find the minimal number of boxes that cover all the high outputs, create Boolean expressions from the inputs that are common to all elements in the box.\\
+For this example, the common elements in the vertical box are $BC$ and the common elements in the horizontal box are $A\bar{C} (A\bar{B}\bar{C}, AB\bar{C})$.\\
+Thus the overall equation is $Y=BC+A\bar{C}$.
+\subsubsection{K-maps and maxterms}
+Karnaugh maps with maxterms involves grouping the zero entries together, instead of grouping the entries with one values.
+\begin{align*}
+    \includegraphics[scale=0.5]{sources/33.png}
+\end{align*}
+\begin{example}
+    \begin{align*}
+        &\includegraphics[scale=0.5]{sources/34.png}
+        \includegraphics[scale=0.5]{sources/35.png}\\
+        &Y+BC+\bar{AB}
+    \end{align*}
+\end{example}
+\textit{Remark:} The notations for SOP and POS are:
+\begin{itemize}
+    \item SOP: $\sum m$
+    \item POS: $\prod M$
+\end{itemize}
+\newpage
+\begin{example}
+    \ \\
+    $F(A,B,C,D)=\sum(1,5,6,7,9,13)$
+    \begin{align*}
+        \includegraphics[scale=0.5]{sources/36.png}
+    \end{align*}
+    $Y=\bar{C}D+\bar{A}BC$
+\end{example}
+\begin{example}
+    \begin{align*}
+        \includegraphics[scale=0.5]{sources/37.png}        
+    \end{align*}
+\end{example}
+\section{Logical Devices}
+\subsection{Karnaugh Map Review}
+\subsection{Combinational Circuits}
+\textbf{Combinational Circuits} are any circuits where the outputs rely strictly on the inputs.\\
+E.g.,) boolean expression F = ABC (i.e., the output of F depend on the inputs A,B, and C. Nothing else).
+\begin{itemize}
+    \item Multiplexers (i.e., mux)
+    \item Decoders (e.g., Seven-segment decoders)
+    \item Adders (half and full)
+    \item Subtractors
+    \item Comparators
+\end{itemize}
+On the other hand, \textbf{Sequential circuits} are another types of circuits in which the state of the circuit (i.e., memory elements) matter. For sequential circuit, the previous inputs and the outputs affect the output
+
+\subsubsection{Multiplexers}
+Multiplexers take yde
+\subsubsection{Decoders}
+\subsubsection{Adders}
+\subsubsection{Subtractors}
+\subsubsection{Comparators}
+\end{document}
